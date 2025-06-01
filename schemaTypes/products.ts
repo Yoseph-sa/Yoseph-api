@@ -15,8 +15,10 @@ export default {
     },
     {
       name: 'category',
-      type: 'string',
       title: 'Category',
+      type: 'reference',
+      to: [{type: 'categorys'}],
+      description: 'Select a category for this project',
     },
     {
       name: 'projectid',
