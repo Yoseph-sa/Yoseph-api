@@ -10,5 +10,5 @@ export default {
       validation: Rule => Rule.required(),
       description: 'Category display name',
     }
-  ],
+  ], 
 }

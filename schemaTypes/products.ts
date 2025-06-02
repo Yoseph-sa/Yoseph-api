@@ -12,7 +12,7 @@ export default {
       name: 'image',
       type: 'image',
       title: 'Cover Image',
-    },
+    }, 
     {
       name: 'category',
       title: 'Category',
