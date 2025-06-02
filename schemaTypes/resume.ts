@@ -10,7 +10,7 @@ export default {
       type: 'string',
       title: 'Resume',
       initialValue: () => 'Resume',
-    }, 
+    },
     {
       name: 'experience',
       title: 'Experience',

@@ -122,7 +122,7 @@ export default {
           type: 'text',
           title: 'Description',
         },
-      ], 
+      ],
     },
   ],
 }

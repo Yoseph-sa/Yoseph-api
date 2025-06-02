@@ -46,7 +46,7 @@ export default {
           name: 'phone',
           title: 'Phone',
           type: 'string',
-        }, 
+        },
         {
           name: 'location',
           title: 'Location',
