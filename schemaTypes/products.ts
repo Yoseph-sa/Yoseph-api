@@ -3,10 +3,20 @@ export default {
   type: 'document',
   title: 'Portfolio Project',
   fields: [
-    {
+       {
       name: 'name',
       type: 'string',
       title: 'Project Name',
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'name',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
     },
     {
       name: 'image',
