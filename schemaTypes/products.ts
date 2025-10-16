@@ -3,26 +3,74 @@ export default {
   type: 'document',
   title: 'Portfolio Project',
   fields: [
-       {
+    {
       name: 'name',
       type: 'string',
       title: 'Project Name',
+      validation: (Rule: any) =>
+        Rule.required().custom(async (value: any, context: any) => {
+          if (!value) return true
+
+          const {document, getClient} = context
+          const client = getClient({apiVersion: '2023-10-01'})
+
+          // Handle both draft and published IDs
+          const docId = document._id.replace(/^drafts\./, '')
+
+          // ✅ Ignore current draft/published pair
+          const existing = await client.fetch(
+            `*[_type == "project2" && name == $name && !(_id in [$draftId, $publishedId])][0]`,
+            {
+              name: value,
+              draftId: `drafts.${docId}`,
+              publishedId: docId,
+            },
+          )
+
+          return existing ? 'A project with this name already exists.' : true
+        }),
     },
     {
       name: 'slug',
-      title: 'Slug',
       type: 'slug',
+      title: 'Slug',
       options: {
         source: 'name',
         maxLength: 96,
+        slugify: (input: any) =>
+          input
+            .toLowerCase()
+            .replace(/\s+/g, '-') // replace spaces with hyphens
+            .replace(/[^\w-]+/g, '') // remove invalid chars
+            .slice(0, 96),
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule: any) =>
+        Rule.required().custom(async (value: any, context: any) => {
+          if (!value?.current) return 'Slug is required'
+          const {document, getClient} = context
+          const client = getClient({apiVersion: '2023-10-01'})
+
+          const docId = document._id.replace(/^drafts\./, '')
+
+          // ✅ Ignore current draft/published pair
+          const existing = await client.fetch(
+            `*[_type == "project2" && slug.current == $slug && !(_id in [$draftId, $publishedId])][0]`,
+            {
+              slug: value.current,
+              draftId: `drafts.${docId}`,
+              publishedId: docId,
+            },
+          )
+
+          return existing ? 'A project with this slug already exists.' : true
+        }),
     },
+
     {
       name: 'image',
       type: 'image',
       title: 'Cover Image',
-    }, 
+    },
     {
       name: 'category',
       title: 'Category',
@@ -44,6 +92,12 @@ export default {
       name: 'years',
       type: 'string',
       title: 'Year',
+    },
+    {
+      name: 'projectImages',
+      type: 'array',
+      title: 'Project Images',
+      of: [{type: 'image'}],
     },
     {
       name: 'multiImages',
