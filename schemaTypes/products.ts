@@ -72,11 +72,16 @@ export default {
       title: 'Cover Image',
     },
     {
-      name: 'category',
-      title: 'Category',
-      type: 'reference',
-      to: [{type: 'categorys'}],
-      description: 'Select a category for this project',
+      name: 'categories',
+      title: 'Categories',
+      type: 'array', // array type for multiple entries
+      of: [
+        {
+          type: 'reference', // each item is a reference
+          to: [{type: 'categorys'}], // pointing to your categories table
+        },
+      ],
+      description: 'Select one or more categories for this project',
     },
     {
       name: 'projectid',
